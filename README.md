@@ -23,7 +23,7 @@ This repository is the official PyTorch implementation of "Cascaded Deep Video D
 ## Get Started
 
 ### Pretrained models
-Pretrained models are available in 
+Pretrained models are available in  
 './experiments/GOPRO.pth'  
 './experiments/DVD.pth'  
 './experiments/BSD.pth'
