@@ -1,4 +1,4 @@
-name: Deblur_3Dconv_add10
+name: Deblur
 model_type: VideoRecurrentModel
 scale: 1
 num_gpu: 1  # set num_gpu: 0 for cpu mode
@@ -23,13 +23,13 @@ network_g:
 
 # path
 path:
-  pretrain_network_g: experiments/Deblur_test/models/net_g_175000.pth
+  pretrain_network_g: experiments/BSD.pth
   strict_load_g: true
 
 # validation settings
 val:
   save_img: true
-  flip_seq: true
+  flip_seq: false
   suffix: ~  # add suffix to saved images, if None, use exp name
 
   metrics:
