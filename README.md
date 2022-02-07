@@ -59,8 +59,10 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port=4321 basicsr
 ```
 
 ### Testing
-- Models are available in  `'./experiments/pretrained_models/'`
+- Model are available in  `'./experiments/pretrained_models/'`
+- Organize your dataset(GOPRO/DVD/BSD) like the above form.
 - Run the following commands:
 ```
 python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
 ```
+- The deblured result will be in './results/'.
