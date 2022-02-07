@@ -10,6 +10,7 @@ By [Jinshan Pan](https://jspan.github.io/), Boming Xu, and [Haoran Bai](https://
 This repository is the official PyTorch implementation of "Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity"
 
 ## Updates
+[2022-02-08] Training code and Testing code are available!
 [2022-02-07] Paper coming soon...
 
 ## Dependencies
@@ -18,3 +19,30 @@ This repository is the official PyTorch implementation of "Cascaded Deep Video D
 - [PyTorch 1.8.0](https://pytorch.org/): `conda install pytorch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 cudatoolkit=10.2 -c pytorch`
 - Install dependent packages `pip install -r requirements.txt`
 - Install CDVD-TSPNL `python setup.py develop`
+
+## Get Started
+
+### Pretrained models
+Pretrained models are available in './experiments/GOPRO.pth', './experiments/DVD.pth', './experiments/BSD.pth'
+
+### Dataset Organization Form
+If you prepare your own dataset, please follow the following form like GOPRO/DVD:
+```
+|--dataset  
+    |--blur  
+        |--video 1
+            |--frame 1
+            |--frame 2
+                ：  
+        |--video 2
+            :
+        |--video n
+    |--gt
+        |--video 1
+            |--frame 1
+            |--frame 2
+                ：  
+        |--video 2
+        	:
+        |--video n
+```
