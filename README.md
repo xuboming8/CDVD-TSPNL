@@ -23,8 +23,7 @@ This repository is the official PyTorch implementation of "Cascaded Deep Video D
 ## Get Started
 
 ### Pretrained models
-Models are available in  
-'./experiments/pretrained_models/'  
+Models are available in  `'./experiments/pretrained_models/'`
 
 ### Dataset Organization Form
 If you prepare your own dataset, please follow the following form like GOPRO/DVD:
