@@ -19,7 +19,7 @@ results are generated using the publicly available code. All the restored frames
 frames from each test set [11] are used for evaluations.
 [![DVD](https://s4.ax1x.com/2022/02/07/HlpJU0.png)](https://imgtu.com/i/HlpJU0)
 
-Quantitative evaluations on the GoPro dataset [43] in terms of PSNR and SSIM.  denotes the reported results
+Quantitative evaluations on the GoPro dataset [43] in terms of PSNR and SSIM. * denotes the reported results
 from [47].
 [![GOPRO](https://s4.ax1x.com/2022/02/07/HlpGEq.png)](https://imgtu.com/i/HlpGEq)
 
