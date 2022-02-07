@@ -23,7 +23,7 @@ network_g:
 
 # path
 path:
-  pretrain_network_g: experiments/BSD.pth
+  pretrain_network_g: experiments/pretrained_models/BSD.pth
   strict_load_g: true
 
 # validation settings
