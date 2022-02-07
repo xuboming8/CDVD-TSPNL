@@ -67,3 +67,5 @@ python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
 ```
 - The deblured result will be in './results/'.
 - We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
+
+## Citation
