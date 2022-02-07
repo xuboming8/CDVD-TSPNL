@@ -67,6 +67,6 @@ python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
 ```
 - The deblured result will be in './results/'.
 - We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
-- If we set 'flip_seq: Ture' in config files, testing code will using self-ensemble strategy.(CDVDTSPNL+)
+- If we set `flip_seq: Ture` in config files, testing code will using self-ensemble strategy.(CDVDTSPNL+)
 
 ## Citation
