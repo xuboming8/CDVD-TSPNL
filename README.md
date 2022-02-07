@@ -49,7 +49,7 @@ If you prepare your own dataset, please follow the following form like GOPRO/DVD
 
 ### Training
 - FlowNet pretrained model has been downloaded in `'./pretrained_models/flownet/'`
-- Download training dataset, or prepare your own dataset like above form.
+- Download training dataset like above form.
 - Run the following commands:
 ```
 Single GPU
@@ -66,3 +66,4 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port=4321 basicsr
 python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
 ```
 - The deblured result will be in './results/'.
+- We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
