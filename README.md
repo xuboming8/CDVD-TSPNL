@@ -23,6 +23,9 @@ Quantitative evaluations on the GoPro dataset [43] in terms of PSNR and SSIM. * 
 from [47].
 [![GOPRO](https://s4.ax1x.com/2022/02/07/HlpGEq.png)](https://imgtu.com/i/HlpGEq)
 
+Quantitative evaluations on the BSD video deblurring dataset [5] in terms of PSNR and SSIM.
+[![BSD](https://s4.ax1x.com/2022/02/07/Hl9hWT.png)](https://imgtu.com/i/Hl9hWT)
+
 ## Dependencies
 - Linux (Tested on Ubuntu 18.04)
 - Python 3 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux))
