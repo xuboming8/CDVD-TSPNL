@@ -13,4 +13,3 @@ torch>=1.7
 torchvision
 tqdm
 yapf
-cupy-cuda111

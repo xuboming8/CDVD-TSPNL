@@ -2,7 +2,7 @@ import torch
 import time
 from torch import nn as nn
 from basicsr.utils.registry import ARCH_REGISTRY
-from .arch_util import ResidualBlockNoBN, flow_warp, Bottleneck, make_layer, TSM, default_conv, ResidualGroup, conv2d_extractor, ResidualBlockNoBN2D
+from .arch_util import ResidualBlockNoBN, flow_warp, make_layer, TSM, default_conv, ResidualGroup, conv2d_extractor, ResidualBlockNoBN2D
 from basicsr.archs.global_attention import globalAttention
 from basicsr.archs.srn import SRN
 import torch.nn.functional as F
@@ -24,13 +24,10 @@ class Deblur(nn.Module):
 
         # transformer
         self.global_attention = globalAttention(num_feat)
-        # self.resblock_CoT = ResidualBlocksCoT(num_feat)
         self.conv_downsample = nn.Conv3d(num_feat, num_feat, (3, 3, 3), (1, 2, 2), (1, 1, 1))
         self.conv_upsample = nn.ConvTranspose3d(num_feat, num_feat, (3, 4, 4), (1, 2, 2), (1, 1, 1))
 
         # extractor
-        # self.extractor_2Dconv = extractor2D(3, num_feat, 5)
-        # self.tsn = FastConvTSN(3, num_feat, 5)
         self.extractor_2dres = extractor_2DRes(3, num_feat, 3)
 
         # propogation branch
@@ -89,16 +86,6 @@ class Deblur(nn.Module):
         # downsample for transformer
         tf_intput_feature = self.conv_downsample(lrs_feature.permute(0, 2, 1, 3, 4))  # b c t h//2 w//2
 
-        # transformer CoT
-        # tf_output_feature = self.resblock_CoT(tf_intput_feature)   # b c t h/2/ w//2
-
-        # tf_list = []
-        # for i in range(0, t):
-        #     cur_feat = tf_intput_feature[:, :, i, :, :]
-        #     cur_feat_tf = self.resblock_CoT(cur_feat)
-        #     tf_list.append(cur_feat_tf)
-        # tf_output_feature = torch.stack(tf_list, dim=2)
-
         # transformer VSR
         tf_intput_feature = tf_intput_feature.permute(0, 2, 1, 3, 4)  # b t c h//2 w//2
         tf_output_feature = self.global_attention(tf_intput_feature)
@@ -113,8 +100,6 @@ class Deblur(nn.Module):
         # backward & forward propagation & res block
         backward_feature = self.backward_propagation(tf_output_feature, flows_backward)  # b 64 t 256 256
         forward_feature = self.forward_propagation(tf_output_feature, flows_forward)  # b 64 t 256 256
-        # backward_feature = self.backward_propagation(tf_output_feature)  # b 64 t 256 256
-        # forward_feature = self.forward_propagation(tf_output_feature)  # b 64 t 256 256
 
         # compute TSP
         tsp_l = []
@@ -180,20 +165,6 @@ class ResidualBlocks2D(nn.Module):
         return self.main(fea)
 
 
-class ResidualBlocksCoT(nn.Module):
-    def __init__(self, num_feat=64):
-        super().__init__()
-        self.main = nn.Sequential(
-            Bottleneck(inplanes=num_feat, planes=num_feat),
-            # Bottleneck(inplanes=num_feat, planes=num_feat),
-            # Bottleneck(inplanes=num_feat, planes=num_feat),
-            # nn.Conv3d(num_feat*4, num_feat, kernel_size=1, bias=False)
-        )
-
-    def forward(self, fea):
-        return self.main(fea)
-
-
 class extractor_2DRes(nn.Module):
     def __init__(self, inchan=3, num_feat=64, num_block=30):
         super().__init__()
@@ -206,26 +177,6 @@ class extractor_2DRes(nn.Module):
         fea = self.conv(fea)                             # b 64 t 256 256
         return self.main(fea).permute(0, 2, 1, 3, 4)     # b t 64 256 256
 
-
-# conv3d_propagation
-def manual_padding_1(lrs):
-    x_0 = lrs[:, 1, :, :, :].unsqueeze(1)
-    x_t = lrs[:, -2, :, :, :].unsqueeze(1)
-    lrs = torch.cat([x_0, lrs], dim=1)
-    lrs = torch.cat([lrs, x_t], dim=1)
-    return lrs
-
-def manual_padding_2(lrs):
-        x_2 = lrs[:, 1, :, :, :].unsqueeze(1)
-        x_3 = lrs[:, 2, :, :, :].unsqueeze(1)
-        x_rev_2 = lrs[:, -2, :, :, :].unsqueeze(1)
-        x_rev_3 = lrs[:, -3, :, :, :].unsqueeze(1)
-        # print(lrs.shape,x_2.shape,x_3.shape,x_rev_2.shape,x_rev_3.shape)
-        lrs = torch.cat([x_2, lrs], dim=1)
-        lrs = torch.cat([x_3, lrs], dim=1)
-        lrs = torch.cat([lrs, x_rev_2], dim=1)
-        lrs = torch.cat([lrs, x_rev_3], dim=1)
-        return lrs
 
 class manual_conv3d_propagation_backward(nn.Module):
     def __init__(self, num_feat=64, num_block=15):
@@ -283,54 +234,3 @@ class manual_conv3d_propagation_forward(nn.Module):
 
         conv3d_feature = torch.stack(forward_list, dim=2)      # b 64 t 256 256
         return conv3d_feature
-
-# class manual_conv3d_propagation_backward(nn.Module):
-#     def __init__(self, num_feat=64, num_block=15):
-#         super().__init__()
-#         self.conv_downchan = nn.Conv2d(num_feat * 2, num_feat, 1, 1, 0, bias=True)
-#         self.lrelu = nn.LeakyReLU(negative_slope=0.1, inplace=True)
-#         self.resblock_bcakward2d = ResidualBlocks2D(num_feat, num_block)
-#
-#     def forward(self, feature):
-#         # predefine
-#         b, t, c, h, w = feature.size()                           # b t 64 256 256
-#         backward_list = []
-#         feat_prop = feature.new_zeros(b, c, h, w)
-#         # propagation
-#         for i in range(t - 1, -1, -1):
-#             x_feat = feature[:, i, :, :, :]
-#             # fusion propagation
-#             x_feat = torch.cat([x_feat, feat_prop], dim=1)       # b 128 256 256
-#             feat_prop = self.lrelu(self.conv_downchan(x_feat))   # b 64 256 256
-#             # resblock2D
-#             feat_prop = self.resblock_bcakward2d(feat_prop)
-#             backward_list.append(feat_prop)
-#
-#         backward_list = backward_list[::-1]
-#         conv3d_feature = torch.stack(backward_list, dim=2)      # b 64 t 256 256
-#         return conv3d_feature
-#
-#
-# class manual_conv3d_propagation_forward(nn.Module):
-#     def __init__(self, num_feat=64, num_block=15):
-#         super().__init__()
-#         self.conv_downchan = nn.Conv2d(num_feat * 2, num_feat, 1, 1, 0, bias=True)
-#         self.lrelu = nn.LeakyReLU(negative_slope=0.1, inplace=True)
-#         self.resblock_bcakward2d = ResidualBlocks2D(num_feat, num_block)
-#
-#     def forward(self, feature):
-#         # predefine
-#         b, t, c, h, w = feature.size()                          # b t 64 256 256
-#         forward_list = []
-#         feat_prop = feature.new_zeros(b, c, h, w)
-#         for i in range(0, t):
-#             x_feat = feature[:, i, :, :, :]
-#             # fusion propagation
-#             x_feat = torch.cat([x_feat, feat_prop], dim=1)       # b 128 256 256
-#             feat_prop = self.lrelu(self.conv_downchan(x_feat))   # b 64 256 256
-#             # resblock2D
-#             feat_prop = self.resblock_bcakward2d(feat_prop)
-#             forward_list.append(feat_prop)
-#
-#         conv3d_feature = torch.stack(forward_list, dim=2)      # b 64 t 256 256
-#         return conv3d_feature
