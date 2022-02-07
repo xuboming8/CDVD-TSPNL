@@ -13,6 +13,16 @@ This repository is the official PyTorch implementation of "Cascaded Deep Video D
 [2022-02-08] Training code and Testing code are available!  
 [2022-02-07] Paper coming soon...
 
+## Experimental Results
+Quantitative evaluations on the video deblurring dataset [11] in terms of PSNR and SSIM. All the comparison
+results are generated using the publicly available code. All the restored frames instead of randomly selected 30
+frames from each test set [11] are used for evaluations.
+[![DVD](https://s4.ax1x.com/2022/02/07/HlpJU0.png)](https://imgtu.com/i/HlpJU0)
+
+Quantitative evaluations on the GoPro dataset [43] in terms of PSNR and SSIM.  denotes the reported results
+from [47].
+[![GOPRO](https://s4.ax1x.com/2022/02/07/HlpGEq.png)](https://imgtu.com/i/HlpGEq)
+
 ## Dependencies
 - Linux (Tested on Ubuntu 18.04)
 - Python 3 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux))
