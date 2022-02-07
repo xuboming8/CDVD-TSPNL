@@ -36,7 +36,7 @@ Quantitative evaluations on the BSD video deblurring dataset [5] in terms of PSN
 ## Get Started
 
 ### Pretrained models
-Models are available in  `'./experiments/pretrained_models/'`
+- Models are available in  `'./experiments/pretrained_models/'`
 
 ### Dataset Organization Form
 If you prepare your own dataset, please follow the following form like GOPRO/DVD:
