@@ -79,7 +79,7 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port=4321 basicsr
 python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
 ```
 - The deblured result will be in './results/'.
-- We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
 - If you set `flip_seq: Ture` in config files, testing code will use self-ensemble strategy.(CDVDTSPNL+)
+- We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
 
 ## Citation
