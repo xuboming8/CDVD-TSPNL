@@ -8,6 +8,7 @@
 By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbhr.github.io/), Jinhui Tang, and [Ming-Hsuan Yang](https://scholar.google.com/citations?user=p9-ohHsAAAAJ&hl=en)
 
 This repository is the official PyTorch implementation of "Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity"
+![](gif/DVD.gif)
 
 ## Updates
 [2022-04-30] Paper has been submitted to IEEE TPAMI\
@@ -95,7 +96,7 @@ python merge_full.py
 
 ## Citation
 ```
-@InProceedings{Pan_2022_TPAMI,
+@InProceedings{Pan_2023_TPAMI,
     author = {Pan, Jinshan and Xu, Boming and Bai, Haoran and Tang, Jinhui and Yang, Ming-Hsuan},
     title = {Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity},
     booktitle = {IEEE Transactions on Pattern Analysis and Machine Intelligence(TPAMI)},
