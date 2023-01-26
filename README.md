@@ -9,12 +9,12 @@ By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbh
 
 ![GOPRO.gif](https://i.328888.xyz/2023/01/26/b9mqk.gif)
 ![DVD.gif](https://i.328888.xyz/2023/01/26/b9FI8.gif)
-<br />　　　　　　　　**GOPRO**
+<br />　　　　　　　　**GOPRO**　　　　　　　**DVD**
 
 
 ![BSD1.gif](https://i.328888.xyz/2023/01/26/b9TuA.gif)
 ![BSD2.gif](https://i.328888.xyz/2023/01/26/b9YTV.gif)
-<br />　　　　　　　　　**BSD**
+<br />　　　　　　　　　**BSD**　　　　　　　**BSD**
 
 This repository is the official PyTorch implementation of "Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity"
 
