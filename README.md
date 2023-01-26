@@ -10,7 +10,9 @@ By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbh
 This repository is the official PyTorch implementation of "Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity"
 
 ## Updates
-[2022-02-07] Paper has been accepted by IEEE TPAMI
+[2022-04-30] Paper has been submitted to IEEE TPAMI
+[2023-01-23] Paper has been accepted by IEEE TPAMI
+[2023-01-31] Training&Testing code is available!
 
 ## Experimental Results
 Quantitative evaluations on the video deblurring dataset [11] in terms of PSNR and SSIM. All the comparison
