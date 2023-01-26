@@ -12,7 +12,7 @@ This repository is the official PyTorch implementation of "Cascaded Deep Video D
 ## Updates
 [2022-04-30] Paper has been submitted to IEEE TPAMI\
 [2023-01-23] Paper has been accepted by IEEE TPAMI\
-[2023-01-31] Training & Testing code is available!\
+[2023-01-31] Training & Testing code is available!
 
 ## Experimental Results
 Quantitative evaluations on the video deblurring dataset [11] in terms of PSNR and SSIM. All the comparison
@@ -73,13 +73,13 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port=4321 basicsr
 ```
 
 ### Testing
-- Models are available in  `'./experiments/pretrained_models/'`
+- Models are available in  `'./experiments/pretrained_models/'`.
 - Organize your dataset(GOPRO/DVD/BSD) like the above form.
 - Run the following commands:
 ```
 python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
 ```
-- The deblured result will be in './results/'.
+- The deblured result will be in `'./results/'`.
 - If you set `flip_seq: Ture` in config files, testing code will use self-ensemble strategy.(CDVDTSPNL+)
 - We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
 
