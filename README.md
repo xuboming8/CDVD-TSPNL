@@ -15,17 +15,14 @@ This repository is the official PyTorch implementation of "Cascaded Deep Video D
 [2023-01-31] Training & Testing code is available!
 
 ## Experimental Results
-Quantitative evaluations on the video deblurring dataset [11] in terms of PSNR and SSIM. All the comparison
-results are generated using the publicly available code. All the restored frames instead of randomly selected 30
-frames from each test set [11] are used for evaluations.
-[![DVD](https://s4.ax1x.com/2022/02/07/HlpJU0.png)](https://imgtu.com/i/HlpJU0)
+Quantitative evaluations on the DVD dataset in terms of PSNR and SSIM. * denotes the reported results using self-ensemblestrategy.
+[![DVD](https://s1.ax1x.com/2023/01/26/pSN2pon.png)](https://imgse.com/i/pSN2pon)
 
-Quantitative evaluations on the GoPro dataset [43] in terms of PSNR and SSIM. * denotes the reported results
-from [47].
-[![GOPRO](https://s4.ax1x.com/2022/02/07/HlpGEq.png)](https://imgtu.com/i/HlpGEq)
+Quantitative evaluations on the GoPro dataset in terms of PSNR and SSIM. * denotes the reported results using self-ensemblestrategy
+[![GOPRO](https://s1.ax1x.com/2023/01/26/pSN2FzT.png)](https://imgse.com/i/pSN2FzT)
 
-Quantitative evaluations on the BSD video deblurring dataset [5] in terms of PSNR and SSIM.
-[![BSD](https://s4.ax1x.com/2022/02/07/Hl9hWT.png)](https://imgtu.com/i/Hl9hWT)
+Quantitative evaluations on the BSD video deblurring dataset in terms of PSNR and SSIM.
+[![BSD](https://s1.ax1x.com/2023/01/26/pSN2AQU.png)](https://imgse.com/i/pSN2AQU)
 
 ## Dependencies
 - Linux (Tested on Ubuntu 18.04)
