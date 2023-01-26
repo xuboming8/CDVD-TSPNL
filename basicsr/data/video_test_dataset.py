@@ -285,3 +285,109 @@ class VideoRecurrentTestDataset(VideoTestDataset):
 
     def __len__(self):
         return len(self.folders)
+
+
+@DATASET_REGISTRY.register()
+class VideoRecurrentSplitClipsTestDataset(VideoTestDataset):
+    """Video test dataset for recurrent architectures, which takes LR video
+    frames as input and output corresponding HR video frames. However, before
+    that, the video frames are splited into clips.
+
+    Args:
+        Same as VideoTestDataset.
+        Additional opt:
+            num_overlap (int): The number of overlaps between adjacent clips.
+        Unused opt:
+            padding (str): Padding mode.
+
+    """
+
+    def __init__(self, opt):
+        super(VideoRecurrentSplitClipsTestDataset, self).__init__(opt)
+
+        ori_folders = sorted(list(self.imgs_lq.keys()))
+        ori_num_frames_per_folder = {}
+        ori_imgs_lq_paths = {}
+        ori_imgs_gt_paths = {}
+        now_idx = 0
+        for folder in ori_folders:
+            if self.cache_data:
+                nf = self.imgs_lq[folder].size()[0]
+            else:
+                nf = len(self.imgs_lq[folder])
+            ori_num_frames_per_folder[folder] = nf
+            ori_imgs_lq_paths[folder] = self.data_info['lq_path'][now_idx:now_idx + nf]
+            ori_imgs_gt_paths[folder] = self.data_info['gt_path'][now_idx:now_idx + nf]
+            now_idx = now_idx + nf
+
+        # Split Clips
+        num_frame = self.opt['num_frame']
+        num_overlap = self.opt['num_overlap']
+        clip_data_info = {'lq_path': [], 'gt_path': [], 'folder': [], 'idx': [], 'border': []}
+        clip_folders = []
+        clip_imgs_lq = {}
+        clip_imgs_gt = {}
+        for folder in ori_folders:
+            num_all = ori_num_frames_per_folder[folder]
+
+            for i in range((num_all - num_overlap) // (num_frame - num_overlap)):
+                clip_folder = f'{folder}-{i:03d}'
+                clip_folders.append(clip_folder)
+                clip_imgs_lq[clip_folder] = \
+                    self.imgs_lq[folder][i * (num_frame - num_overlap):i * (num_frame - num_overlap) + num_frame]
+                clip_imgs_gt[clip_folder] = \
+                    self.imgs_gt[folder][i * (num_frame - num_overlap):i * (num_frame - num_overlap) + num_frame]
+                clip_data_info['lq_path'].extend(
+                    ori_imgs_lq_paths[folder][i * (num_frame - num_overlap):i * (num_frame - num_overlap) + num_frame])
+                clip_data_info['gt_path'].extend(
+                    ori_imgs_gt_paths[folder][i * (num_frame - num_overlap):i * (num_frame - num_overlap) + num_frame])
+                clip_data_info['folder'].extend([clip_folder] * num_frame)
+                for i in range(num_frame):
+                    clip_data_info['idx'].append(f'{i}/{num_frame}')
+                border_l = [0] * num_frame
+                for i in range(num_frame // 2):
+                    border_l[i] = 1
+                    border_l[num_frame - i - 1] = 1
+                clip_data_info['border'].extend(border_l)
+
+            if (num_all - num_overlap) % (num_frame - num_overlap) != 0:
+                clip_folder = f'{folder}-{((num_all - num_overlap) // (num_frame - num_overlap)):03d}'
+                clip_folders.append(clip_folder)
+                clip_imgs_lq[clip_folder] = self.imgs_lq[folder][-num_frame:]
+                clip_imgs_gt[clip_folder] = self.imgs_gt[folder][-num_frame:]
+                clip_data_info['lq_path'].extend(ori_imgs_lq_paths[folder][-num_frame:])
+                clip_data_info['gt_path'].extend(ori_imgs_gt_paths[folder][-num_frame:])
+                clip_data_info['folder'].extend([clip_folder] * num_frame)
+                for i in range(num_frame):
+                    clip_data_info['idx'].append(f'{i}/{num_frame}')
+                border_l = [0] * num_frame
+                for i in range(num_frame // 2):
+                    border_l[i] = 1
+                    border_l[num_frame - i - 1] = 1
+                clip_data_info['border'].extend(border_l)
+
+        self.folders = clip_folders
+        self.imgs_lq = clip_imgs_lq
+        self.imgs_gt = clip_imgs_gt
+        self.data_info = clip_data_info
+
+    def __getitem__(self, index):
+        folder = self.folders[index]
+
+        if self.cache_data:
+            imgs_lq = self.imgs_lq[folder]
+            imgs_gt = self.imgs_gt[folder]
+        else:
+            img_paths_lq = self.imgs_lq[folder]
+            img_paths_gt = self.imgs_gt[folder]
+            imgs_lq = read_img_seq(img_paths_lq)
+            imgs_gt = read_img_seq(img_paths_gt)
+
+        return {
+            'lq': imgs_lq,
+            'gt': imgs_gt,
+            'folder': folder,
+        }
+
+    def __len__(self):
+        return len(self.folders)

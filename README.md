@@ -15,10 +15,18 @@ This repository is the official PyTorch implementation of "Cascaded Deep Video D
 [2023-01-31] Training & Testing code is available!
 
 ## Experimental Results
-Quantitative evaluations on the DVD dataset in terms of PSNR and SSIM. * denotes the reported results using self-ensemblestrategy.
+Deblurred result on a real challenging video. Our method is motivated by the success of deblurring
+approaches based on variational models. It explores sharp pixels from adjacent frames by a temporal sharpness
+prior and non-local spatial-temporal similarity contexts to constrain deep convolutional neural networks (CNNs)
+and restores sharp videos by a cascaded inference process. We show that enforcing the temporal sharpness
+prior and non-local spatial-temporal similarity contexts and learning the deep CNNs by a cascaded inference
+manner can make the deep CNN more compact and generate better-deblurred results (i.e., (f) and (g)) than both
+the CNN-based methods [2], [3], [4] and variational model-based method [1].
+[![CDVD-TSPNL](https://s1.ax1x.com/2023/01/26/pSNRWHH.png)](https://imgse.com/i/pSNRWHH)
+Quantitative evaluations on the DVD dataset in terms of PSNR and SSIM. * denotes the reported results using self-ensemble strategy.
 [![DVD](https://s1.ax1x.com/2023/01/26/pSN2pon.png)](https://imgse.com/i/pSN2pon)
 
-Quantitative evaluations on the GoPro dataset in terms of PSNR and SSIM. * denotes the reported results using self-ensemblestrategy
+Quantitative evaluations on the GoPro dataset in terms of PSNR and SSIM. * denotes the reported results using self-ensemble strategy
 [![GOPRO](https://s1.ax1x.com/2023/01/26/pSN2FzT.png)](https://imgse.com/i/pSN2FzT)
 
 Quantitative evaluations on the BSD video deblurring dataset in terms of PSNR and SSIM.
@@ -75,9 +83,21 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port=4321 basicsr
 - Run the following commands:
 ```
 python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
+cd results
+python merge_full.py
 ```
-- The deblured result will be in `'./results/'`.
+- Before running merge_full.py, you should change the parameters in this file of Line 5,7,9,11.
+- The deblured result will be in `'./results/dataset_name/'`.
 - If you set `flip_seq: Ture` in config files, testing code will use self-ensemble strategy.(CDVDTSPNL+)
 - We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
 
 ## Citation
+```
+@InProceedings{Pan_2022_TPAMI,
+    author = {Pan, Jinshan and Xu, Boming and Bai, Haoran and Tang, Jinhui and Yang, Ming-Hsuan},
+    title = {Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity},
+    booktitle = {IEEE Transactions on Pattern Analysis and Machine Intelligence(TPAMI)},
+    month = {Jan},
+    year = {2023}
+}
+```

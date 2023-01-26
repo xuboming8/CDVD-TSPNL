@@ -1,5 +1,5 @@
 # general settings
-name: Deblur_add10_fastpropagation_extractor2dres_CoT_spyflow_BSD
+name: BSD_train
 model_type: VideoRecurrentModel
 scale: 1
 num_gpu: 1  # set num_gpu: 0 for cpu mode
@@ -33,15 +33,16 @@ datasets:
 
   val:
     name: BSD
-    type: VideoRecurrentTestDataset
+    type: VideoRecurrentSplitClipsTestDataset
     dataroot_gt: /media/xbm/data/VideoDeblur_Dataset/BSD/BSD_1ms8ms/valid/gt
     dataroot_lq: /media/xbm/data/VideoDeblur_Dataset/BSD/BSD_1ms8ms/valid/blur
 
-    cache_data: true
+    cache_data: false
     io_backend:
       type: disk
 
-    num_frame: -1  # not needed
+    num_frame: 10
+    num_overlap: 0
 
 # network structures
 network_g:
@@ -49,11 +50,10 @@ network_g:
   num_feat: 64
   num_block: 3
   spynet_path: experiments/pretrained_models/flownet/spynet_sintel_final-3d2a1287.pth
-  raft_path: experiments/pretrained_models/flownet/raft-small.pth
 
 # path
 path:
-  pretrain_network_g: /media/xbm/data/xbm/BasicSR/experiments/pretrained_models/net_g_586000.pth
+  pretrain_network_g: ~
   strict_load_g: true
   resume_state: ~
 
@@ -67,17 +67,17 @@ train:
 
   scheduler:
     type: CosineAnnealingRestartLR
-    periods: [300000]
-    restart_weights: [0.1]
+    periods: [300000, 300000]
+    restart_weights: [1, 0.5]
     eta_min: !!float 1e-7
 
 #    type: MultiStepRestartLR
 #    milestones: [200000]
 #    gamma: 0.5
 
-  total_iter: 300000
+  total_iter: 600000
   warmup_iter: -1  # no warm up
-  fix_flow: 0
+  fix_flow: 5000
   flow_lr_mul: 0.125
 
   # losses

@@ -1,4 +1,4 @@
-name: Deblur
+name: DVD_test
 model_type: VideoRecurrentModel
 scale: 1
 num_gpu: 1  # set num_gpu: 0 for cpu mode
@@ -7,13 +7,15 @@ manual_seed: 0
 datasets:
   test_1:  # the 1st test dataset
     name: DVD
-    type: VideoRecurrentTestDataset
+    type: VideoRecurrentSplitClipsTestDataset
     dataroot_gt: /media/xbm/data/VideoDeblur_Dataset/DVD/test/gt
     dataroot_lq: /media/xbm/data/VideoDeblur_Dataset/DVD/test/blur
-    cache_data: True
+    cache_data: false
     io_backend:
       type: disk
-    num_frame: -1  # not needed
+
+    num_frame: 10
+    num_overlap: 0
 
 # network structures
 network_g:
@@ -32,12 +34,4 @@ val:
   flip_seq: false
   suffix: ~  # add suffix to saved images, if None, use exp name
 
-  metrics:
-    psnr: # metric name, can be arbitrary
-      type: calculate_psnr
-      crop_border: 0
-      test_y_channel: false
-    ssim:
-      type: calculate_ssim
-      crop_border: 0
-      test_y_channel: false
+  metrics: ~

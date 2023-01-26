@@ -7,7 +7,6 @@ from torch.nn.modules.batchnorm import _BatchNorm
 
 from basicsr.utils import get_root_logger
 from basicsr.archs.layers.create_act import get_act_layer
-from basicsr.archs.tsm import TemporalShift
 import datetime
 
 @torch.no_grad()
@@ -119,115 +118,6 @@ class ResidualBlockNoBN2D(nn.Module):
         return identity + out * self.res_scale
 
 
-class TSM(nn.Module):
-    def __init__(self, num_feat=64):
-        super(TSM, self).__init__()
-        self.tsm = TemporalShift(nn.Sequential(), n_div=8, inplace=False)
-        self.conv = nn.Conv3d(num_feat, num_feat, (1, 3, 3), 1, (0, 1, 1), bias=True)
-        self.relu = nn.ReLU(inplace=True)
-
-    def forward(self, x):
-        # split segment & tsm3
-        if(x.size(1) == 10):
-            x_list = torch.split(x, [3, 3, 4], dim=1)
-            x0 = self.tsm(x_list[0])
-            x1 = self.tsm(x_list[1])
-            x2 = self.tsm(x_list[2])
-            x = torch.cat([x0, x1, x2], dim=1)  # b t c h w
-        else:
-            x_list = torch.split(x, 4, dim=1)
-            if(len(x_list)==1):
-                x = self.tsm(x_list[0])
-            else:
-                x0 = self.tsm(x_list[0])
-                x1 = self.tsm(x_list[1])
-                x = torch.cat([x0, x1], dim=1)  # b t c h w
-        # tsm residual block
-        x = x.permute(0, 2, 1, 3, 4)            # b c t h w
-        identity = x
-        out = self.relu(self.conv(x) + identity)
-        return out.permute(0, 2, 1, 3, 4)       # b t c h w
-
-
-def manual_padding_1(lrs):
-    x_0 = lrs[:, 1, :, :, :].unsqueeze(1)
-    x_t = lrs[:, -2, :, :, :].unsqueeze(1)
-    lrs = torch.cat([x_0, lrs], dim=1)
-    lrs = torch.cat([lrs, x_t], dim=1)
-    return lrs
-
-class conv2d_extractor(nn.Module):
-    def __init__(self, num_feat=64):
-        super(conv2d_extractor, self).__init__()
-        self.conv3d_extractor = nn.Conv3d(num_feat, num_feat, (1, 3, 3), 1, (0, 1, 1), bias=True)
-
-    def forward(self, x):
-        lrs_feature = self.conv3d_extractor(x)  # b 64 t 256 256
-        return lrs_feature
-
-###############################
-# RCAB
-###############################
-def default_conv(in_channels, out_channels, kernel_size, bias=True):
-    return nn.Conv2d(
-        in_channels, out_channels, kernel_size,
-        padding=(kernel_size//2), bias=bias)
-
-## Channel Attention (CA) Layer
-class CALayer(nn.Module):
-    def __init__(self, channel, reduction=16):
-        super(CALayer, self).__init__()
-        # global average pooling: feature --> point
-        self.avg_pool = nn.AdaptiveAvgPool2d(1)
-        # feature channel downscale and upscale --> channel weight
-        self.conv_du = nn.Sequential(
-                nn.Conv2d(channel, channel // reduction, 1, padding=0, bias=True),
-                nn.ReLU(inplace=True),
-                nn.Conv2d(channel // reduction, channel, 1, padding=0, bias=True),
-                nn.Sigmoid()
-        )
-
-    def forward(self, x):
-        y = self.avg_pool(x)
-        y = self.conv_du(y)
-        return x * y
-
-## Residual Channel Attention Block (RCAB)
-class RCAB(nn.Module):
-    def __init__(self, conv, n_feat, kernel_size, reduction, bias=True, bn=False, act=nn.ReLU(True), res_scale=1):
-
-        super(RCAB, self).__init__()
-        modules_body = []
-        for i in range(2):
-            modules_body.append(conv(n_feat, n_feat, kernel_size, bias=bias))
-            if bn: modules_body.append(nn.BatchNorm2d(n_feat))
-            if i == 0: modules_body.append(act)
-        modules_body.append(CALayer(n_feat, reduction))
-        self.body = nn.Sequential(*modules_body)
-        self.res_scale = res_scale
-
-    def forward(self, x):
-        res = self.body(x)
-        res += x
-        return res
-
-## Residual Group (RG)
-class ResidualGroup(nn.Module):
-    def __init__(self, conv, n_feat, kernel_size, reduction, act, res_scale, n_resblocks):
-        super(ResidualGroup, self).__init__()
-        modules_body = [
-            RCAB(
-                conv, n_feat, kernel_size, reduction, bias=True, bn=False, act=act, res_scale=res_scale) \
-            for _ in range(n_resblocks)]
-        modules_body.append(conv(n_feat, n_feat, kernel_size))
-        self.body = nn.Sequential(*modules_body)
-
-    def forward(self, x):
-        res = self.body(x)
-        res += x
-        return res
-
-
 class ResidualBlockNoBN(nn.Module):
     """Residual block without BN.
 
@@ -257,74 +147,6 @@ class ResidualBlockNoBN(nn.Module):
         identity = x
         out = self.conv2(self.relu(self.conv1(x)))
         return identity + out * self.res_scale
-
-
-class ResidualBlock2D_fft(nn.Module):
-    def __init__(self, num_feat=64):
-        super(ResidualBlock2D_fft, self).__init__()
-        self.main = nn.Sequential(
-            nn.Conv2d(num_feat, num_feat, kernel_size=3, stride=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(num_feat, num_feat, kernel_size=3, stride=1),
-        )
-        self.main_fft = nn.Sequential(
-            nn.Conv2d(num_feat * 2, num_feat * 2, kernel_size=1, stride=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(num_feat * 2, num_feat * 2, kernel_size=1, stride=1),
-        )
-        self.norm = 'backward'
-
-    def forward(self, x):
-        _, _, H, W = x.shape
-        dim = 1
-        y = torch.fft.rfft2(x, norm=self.norm)
-        y_imag = y.imag
-        y_real = y.real
-        y_f = torch.cat([y_real, y_imag], dim=dim)
-        y = self.main_fft(y_f)
-        y_real, y_imag = torch.chunk(y, 2, dim=dim)
-        y = torch.complex(y_real, y_imag)
-        y = torch.fft.irfft2(y, s=(H, W), norm=self.norm)
-        return self.main(x) + x + y
-
-
-class ResidualBlock3D_fft(nn.Module):
-    def __init__(self, num_feat=64):
-        super(ResidualBlock3D_fft, self).__init__()
-        self.main = nn.Sequential(
-            nn.Conv3d(num_feat, num_feat, 3, 1, 1),
-            nn.ReLU(inplace=True),
-            nn.Conv3d(num_feat, num_feat, 3, 1, 1),
-        )
-        self.main_fft = nn.Sequential(
-            nn.Conv3d(num_feat * 2, num_feat * 2, (3, 1, 1), 1, (1, 0, 0)),
-            nn.ReLU(inplace=True),
-            nn.Conv3d(num_feat * 2, num_feat * 2, (3, 1, 1), 1, (1, 0, 0)),
-        )
-        self.norm = 'backward'
-
-    def forward(self, x):
-        B, T, C, H, W = x.shape
-        fft_list = []
-        for i in range(0, T):
-            feat_now = x[:, i, :, :, :]
-            y = torch.fft.rfft2(feat_now, norm=self.norm)
-            y_imag = y.imag
-            y_real = y.real
-            y_f = torch.cat([y_real, y_imag], dim=1)
-            fft_list.append(y_f)
-        fft_y = torch.stack(fft_list, dim=2)
-        fft_y = self.main_fft(fft_y)
-
-        rfft_list = []
-        for i in range(0, T):
-            feat_now = fft_y[:, :, i, :, :]
-            y_real, y_imag = torch.chunk(feat_now, 2, dim=1)
-            y = torch.complex(y_real, y_imag)
-            y = torch.fft.irfft2(y, s=(H, W), norm=self.norm)
-            rfft_list.append(y)
-        rfft_y = torch.stack(rfft_list, dim=2)
-        return self.main(x.permute(0, 2, 1, 3, 4)) + x.permute(0, 2, 1, 3, 4) + rfft_y
 
 
 class Upsample(nn.Sequential):
