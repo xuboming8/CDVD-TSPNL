@@ -9,7 +9,7 @@ By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbh
 
 ![GOPRO.gif](https://i.328888.xyz/2023/01/26/b9mqk.gif)
 ![DVD.gif](https://i.328888.xyz/2023/01/26/b9FI8.gif)
-<br />GOPRO
+<br />        GOPRO
 
 
 ![BSD1.gif](https://i.328888.xyz/2023/01/26/b9TuA.gif)
