@@ -13,3 +13,8 @@ torch>=1.7
 torchvision
 tqdm
 yapf
+mmcv
+einops
+thop
+ptflops
+cupy-cuda113
