@@ -4,6 +4,8 @@
 [![Python](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/pytorch-1.8.0-%237732a8)](https://pytorch.org/)
 
+#### [Paper](https://ieeexplore.ieee.org/document/10039490) | [Discussion](https://github.com/xuboming8/CDVD-TSPNL/issues)
+
 ### Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity
 By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbhr.github.io/), Jinhui Tang, and [Ming-Hsuan Yang](https://scholar.google.com/citations?user=p9-ohHsAAAAJ&hl=en)
 
