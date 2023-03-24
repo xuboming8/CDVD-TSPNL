@@ -71,10 +71,6 @@ train:
     restart_weights: [1, 0.5]
     eta_min: !!float 1e-7
 
-#    type: MultiStepRestartLR
-#    milestones: [200000]
-#    gamma: 0.5
-
   total_iter: 600000
   warmup_iter: -1  # no warm up
   fix_flow: 5000
