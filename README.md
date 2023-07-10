@@ -98,7 +98,7 @@ python basicsr/test.py -opt options/test/Deblur/test_Deblur_GOPRO.yml
 cd results
 python merge_full.py
 ```
-- Before running merge_full.py, you should change the parameters in this file of Line 5,7,9,11.
+- Before running merge_full.py, you should change the parameters in this file of Line 5,6,7,8.
 - The deblured result will be in `'./results/dataset_name/'`.
 - If you set `flip_seq: Ture` in config files, testing code will use self-ensemble strategy.(CDVDTSPNL+)
 - We calculate PSNRs/SSIMs following [[Here]](https://github.com/csbhr/OpenUtility#chapter-calculating-metrics)
