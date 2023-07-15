@@ -1,14 +1,11 @@
 import os
 import shutil
 
-# parameters setting
-dataset_name = 'GOPRO'
-# testing name in yml
-restoration_name = 'GOPRO_test'
-# the root of your dataset
-root_ori = '/media/xbm/data/VideoDeblur_Dataset/GOPRO/GOPRO_oriname/test/gt/'
-# testing frames
-test_frame = 10
+# setting
+dataset_name = 'GOPRO'                 # 'DVD''BSD'
+restoration_name = 'GOPRO_test'        # saved root in your testing yaml(e.g. first line of test_Deblur_GOPRO.yml)
+root_ori = '/media/xbm/data/VideoDeblur_Dataset/GOPRO/GOPRO_oriname/test/gt/'   # gt root of testing dataset
+test_frame = 10                        # test frame in your testing yaml(e.g. line 17 of test_Deblur_GOPRO.yml)
 
 root = './' + restoration_name + '/visualization/' + dataset_name
 now_video = 0
