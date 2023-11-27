@@ -10,12 +10,11 @@
 By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbhr.github.io/), [Jinhui Tang](https://scholar.google.com/citations?user=ByBLlEwAAAAJ&hl=zh-CN), and [Ming-Hsuan Yang](https://scholar.google.com/citations?user=p9-ohHsAAAAJ&hl=en)
 
 　　　　　![GOPRO](https://github.com/xuboming8/CDVD-TSPNL/assets/20449507/90bc043e-707a-49e5-828f-058d66a9d0ac)　
-![DVD.gif](https://img1.imgtp.com/2023/08/19/E0MUIYQ6.gif)
+![DVD](https://github.com/xuboming8/CDVD-TSPNL/assets/20449507/c9280937-966e-468f-936b-27bc92e04d18)
 <br />　　　　　　　　　　　　　**GOPRO**　　　　　　　　　　　　　　　　　　　**DVD**
 
-
-　　　　　![BSD1.gif](https://img1.imgtp.com/2023/08/19/lC9Z8kLs.gif)　
-![BSD2.gif](https://img1.imgtp.com/2023/08/19/ehRAU2IC.gif)
+　　　　　![BSD1](https://github.com/xuboming8/CDVD-TSPNL/assets/20449507/18b70ee4-febf-40f9-9264-c8f107b04891)　
+![BSD2](https://github.com/xuboming8/CDVD-TSPNL/assets/20449507/4f04bfff-7c3b-4371-8c1e-287e0405a60d)
 <br />　　　　　　　　　　　　　　　　　　　　　　　**BSD(1ms8ms)**
 <br /><br />This repository is the official PyTorch implementation of our TPAMI paper"Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity"
 
