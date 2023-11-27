@@ -9,7 +9,7 @@
 ### Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity
 By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbhr.github.io/), [Jinhui Tang](https://scholar.google.com/citations?user=ByBLlEwAAAAJ&hl=zh-CN), and [Ming-Hsuan Yang](https://scholar.google.com/citations?user=p9-ohHsAAAAJ&hl=en)
 
-　　　　　![GOPRO.gif]((https://github.com/xuboming8/CDVD-TSPNL/blob/main/GOPRO.gif))　
+　　　　　![GOPRO.gif](https://github.com/xuboming8/CDVD-TSPNL/blob/main/GOPRO.gif)　
 ![DVD.gif](https://img1.imgtp.com/2023/08/19/E0MUIYQ6.gif)
 <br />　　　　　　　　　　　　　**GOPRO**　　　　　　　　　　　　　　　　　　　**DVD**
 
