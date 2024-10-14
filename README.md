@@ -7,7 +7,7 @@
 #### [Paper](https://ieeexplore.ieee.org/document/10039490) | [Discussion](https://github.com/xuboming8/CDVD-TSPNL/issues)
 
 ### Cascaded Deep Video Deblurring Using Temporal Sharpness Prior and Non-local Spatial-Temporal Similarity
-By [Jinshan Pan](https://jspan.github.io/), Boming Xu, [Haoran Bai](https://csbhr.github.io/), [Jinhui Tang](https://scholar.google.com/citations?user=ByBLlEwAAAAJ&hl=zh-CN), and [Ming-Hsuan Yang](https://scholar.google.com/citations?user=p9-ohHsAAAAJ&hl=en)
+By [Jinshan Pan](https://jspan.github.io/), [Boming Xu](https://scholar.google.com.hk/citations?user=wdxQ8lwAAAAJ&hl=zh-CN), [Haoran Bai]([https://csbhr.github.io/](https://scholar.google.com.hk/citations?user=SBYJ6YoAAAAJ&hl=zh-CN)), [Jinhui Tang](https://scholar.google.com/citations?user=ByBLlEwAAAAJ&hl=zh-CN), and [Ming-Hsuan Yang](https://scholar.google.com/citations?user=p9-ohHsAAAAJ&hl=en)
 
 　　　　　![GOPRO](https://github.com/xuboming8/CDVD-TSPNL/assets/20449507/90bc043e-707a-49e5-828f-058d66a9d0ac)　
 ![DVD](https://github.com/xuboming8/CDVD-TSPNL/assets/20449507/c9280937-966e-468f-936b-27bc92e04d18)
